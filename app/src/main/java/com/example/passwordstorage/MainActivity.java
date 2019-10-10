@@ -1,16 +1,11 @@
 package com.example.passwordstorage;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,28 +13,37 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     DatabaseHelper myDb;
-    EditText editName,editSurname,editMarks,editID;
+    EditText editName,editSurname,editID;
     Button btnAddData;
     Button btnviewAll;
     Button btnUpdate;
     Button btnDelete;
+    Button btnActiivity2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         myDb = new DatabaseHelper(this);
-        editName = (EditText)findViewById(R.id.editText_name);
-        editSurname = (EditText)findViewById(R.id.editText2_surname);
-        editMarks = (EditText)findViewById(R.id.editText3_Marks);
+        editName = (EditText)findViewById(R.id.editText_login);
+        editSurname = (EditText)findViewById(R.id.editText2_password);
         editID = (EditText)findViewById(R.id.editText4_ID);
         btnAddData = (Button) findViewById(R.id.button_add);
         btnviewAll = (Button) findViewById(R.id.button2_viewAll);
         btnUpdate = (Button) findViewById(R.id.button3_update);
         btnDelete = (Button) findViewById(R.id.button4_Delete);
+        btnActiivity2 = (Button)findViewById(R.id.button_MainActvity);
         AddDta();
         viewAll();
         update();
         deleteData();
+        btnActiivity2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openActivity2();
+            }
+        });
+
+
 
 
 }
@@ -48,8 +52,7 @@ public void AddDta(){
             @Override
             public void onClick(View view) {
                 boolean isInserted = myDb.insertData(editName.getText().toString(),
-                        editSurname.getText().toString(),
-                        editMarks.getText().toString());
+                        editSurname.getText().toString());
                 if(isInserted){
                     Toast.makeText(MainActivity.this,"Data Inserted",Toast.LENGTH_LONG).show();
                 }else {
@@ -71,8 +74,8 @@ public void viewAll(){
                 while (res.moveToNext()){
                     buffer.append("Id : " + res.getString(0)+ "\n");
                     buffer.append("Name : " + res.getString(1)+ "\n");
-                    buffer.append("Surname : " + res.getString(2)+ "\n");
-                    buffer.append("Marks : " + res.getString(3)+ "\n\n");
+                    buffer.append("Surname : " + res.getString(2)+ "\n\n");
+
                 }
                 showMessage("Data",buffer.toString());
 
@@ -85,7 +88,7 @@ public void update(){
             public void onClick(View view) {
                boolean isUpdate =  myDb.updateData(editID.getText().toString(),
                         editName.getText().toString(),
-                        editSurname.getText().toString(),editMarks.getText().toString());
+                        editSurname.getText().toString());
                if(isUpdate){
                    Toast.makeText(MainActivity.this,"Data has been updated",Toast.LENGTH_LONG).show();
                }else {
@@ -115,6 +118,12 @@ public void showMessage(String title,String message){
     builder.setTitle(title);
     builder.setMessage(message);
     builder.show();
+
+
+}
+public void openActivity2(){
+        Intent intent = new Intent(this,Activity2.class);
+        startActivity(intent);
 }
 
 }
